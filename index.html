@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="TechPulse — technology news, programming, cybersecurity, gaming, apps and practical tech tips.">
+  <title>TechPulse — Technology, without the noise</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: "class", theme: { extend: {
+      colors: { ink: "#07111f", pulse: "#5eead4", electric: "#60a5fa" },
+      boxShadow: { glow: "0 0 45px rgba(94,234,212,.14)" }
+    }}};
+  </script>
+  <style>
+    :root { color-scheme: light; }
+    .dark { color-scheme: dark; }
+    html { scroll-behavior:smooth }
+    body { font-family: Inter, ui-sans-serif, system-ui, sans-serif }
+    .glass { background:rgba(255,255,255,.76); backdrop-filter:blur(16px); }
+    .dark .glass { background:rgba(10,20,36,.82); }
+    .line-clamp-2 { display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden }
+    .line-clamp-3 { display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden }
+    .focus-ring:focus-visible { outline:3px solid #5eead4;outline-offset:3px }
+    .ad-slot { border:1px dashed #94a3b8; min-height:82px; }
+    dialog { border:0; padding:0; max-width:min(92vw,760px); width:100%; border-radius:22px; }
+    dialog::backdrop { background:rgba(2,6,23,.72); backdrop-filter:blur(5px) }
+    input,textarea,select { color:#0f172a }
+    .dark input,.dark textarea,.dark select { color:#e2e8f0;background:#111c2d }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-ink dark:text-slate-100">
+  <!--
+    TECHPULSE SETUP
+    1) Replace RSS_FEEDS with feeds you are allowed to republish/link to.
+    2) This single-file demo stores posts, bookmarks and preferences in localStorage.
+    3) Client-side admin credentials are visible to every visitor. This is NOT secure authentication.
+       For a real public site, move login and publishing to a server/Firebase/Supabase with security rules.
+    4) Ad-network scripts belong only in the marked slots below. Review each network's terms and consent rules.
+  -->
+  <!-- AD NETWORK GLOBAL SCRIPT AREA: paste approved network loader here, after checking its terms. -->
+  <div id="ad-global-script-area" hidden></div>
+
+  <header class="sticky top-0 z-40 border-b border-slate-200/70 dark:border-slate-800 glass">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
+      <a href="#" class="flex items-center gap-3 focus-ring rounded-xl" aria-label="TechPulse home">
+        <span class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-teal-300 to-blue-500 text-xl font-black text-slate-950">T</span>
+        <span><span class="block text-xl font-black tracking-tight">Tech<span class="text-teal-500">Pulse</span></span><span class="block text-[10px] uppercase tracking-[.25em] text-slate-500">Technology, without the noise</span></span>
+      </a>
+      <nav class="hidden items-center gap-6 text-sm font-semibold lg:flex" aria-label="Main navigation">
+        <a class="hover:text-teal-500" href="#latest">Latest</a><a class="hover:text-teal-500" href="#categories">Categories</a><a class="hover:text-teal-500" href="#about">About</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <button id="bookmarksTop" class="focus-ring rounded-xl border border-slate-200 px-3 py-2 text-sm dark:border-slate-700" aria-label="Show bookmarks">Saved <span id="bookmarkCount" class="ml-1 rounded-full bg-teal-400 px-2 py-0.5 text-xs font-bold text-slate-950">0</span></button>
+        <button id="themeToggle" class="focus-ring rounded-xl border border-slate-200 p-2 dark:border-slate-700" aria-label="Toggle dark mode">🌙</button>
+        <button id="adminOpen" class="focus-ring rounded-xl bg-slate-900 px-3 py-2 text-sm font-bold text-white dark:bg-teal-300 dark:text-slate-950">Admin</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="relative isolate overflow-hidden bg-ink text-white">
+      <div class="absolute inset-0 -z-10 opacity-40" style="background:radial-gradient(circle at 15% 20%,#0d9488,transparent 35%),radial-gradient(circle at 85% 70%,#2563eb,transparent 35%)"></div>
+      <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 md:grid-cols-[1.15fr_.85fr] md:py-24">
+        <div>
+          <span class="inline-flex items-center gap-2 rounded-full border border-teal-300/30 bg-teal-300/10 px-3 py-1 text-xs font-bold uppercase tracking-widest text-teal-200"><span class="h-2 w-2 animate-pulse rounded-full bg-teal-300"></span> Your daily tech briefing</span>
+          <h1 class="mt-6 max-w-3xl text-4xl font-black leading-tight tracking-tight sm:text-6xl">The future moves fast.<br><span class="bg-gradient-to-r from-teal-300 to-blue-400 bg-clip-text text-transparent">Stay one step ahead.</span></h1>
+          <p class="mt-5 max-w-xl text-lg leading-8 text-slate-300">Fresh technology news, practical tutorials, cybersecurity insights and ideas shaping tomorrow.</p>
+          <div class="mt-8 flex flex-wrap gap-3"><a href="#latest" class="rounded-xl bg-teal-300 px-5 py-3 font-bold text-slate-950 shadow-glow hover:bg-teal-200">Explore latest stories →</a><a href="#categories" class="rounded-xl border border-white/25 px-5 py-3 font-bold hover:bg-white/10">Browse topics</a></div>
+          <p class="mt-8 text-xs text-slate-400">Independent tech reading · Curated feeds · Clear explanations</p>
+        </div>
+        <div class="relative">
+          <div class="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-teal-400/20 to-blue-500/20 blur-2xl"></div>
+          <div class="relative overflow-hidden rounded-[2rem] border border-white/15 bg-white/5 p-4 shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1100&q=85" alt="Close-up of a computer circuit board" class="h-64 w-full rounded-2xl object-cover sm:h-80">
+            <div class="flex items-center justify-between gap-4 p-3"><div><p class="text-xs uppercase tracking-widest text-teal-200">TechPulse briefing</p><p class="mt-1 text-lg font-bold">Ideas. Innovation. Impact.</p></div><span class="rounded-xl bg-teal-300 px-3 py-2 text-xl text-slate-950">✦</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="categories" class="mx-auto max-w-7xl px-4 py-10">
+      <div class="mb-5 flex flex-wrap items-end justify-between gap-3"><div><p class="text-xs font-bold uppercase tracking-[.2em] text-teal-600">Explore by interest</p><h2 class="mt-1 text-2xl font-black">Browse categories</h2></div><span class="text-sm text-slate-500">Seven focused topics</span></div>
+      <div id="categoryFilters" class="flex flex-wrap gap-2"></div>
+    </section>
+
+    <section id="latest" class="mx-auto max-w-7xl px-4 pb-16">
+      <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+        <div><p class="text-xs font-bold uppercase tracking-[.2em] text-teal-600">The latest signal</p><h2 id="feedTitle" class="mt-1 text-3xl font-black">Latest stories</h2><p id="feedSub" class="mt-2 text-sm text-slate-500">Hand-picked reads and fresh feed updates.</p></div>
+        <div class="flex flex-wrap gap-2"><input id="searchInput" type="search" placeholder="Search articles..." class="focus-ring w-48 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900"><button id="refreshFeeds" class="focus-ring rounded-xl bg-slate-900 px-4 py-2 text-sm font-bold text-white dark:bg-teal-300 dark:text-slate-950">↻ Refresh feeds</button></div>
+      </div>
+      <div class="mb-8 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 dark:border-slate-700 dark:bg-slate-900"><p class="px-2 pb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">Advertisement</p><div id="monetagBannerTop" class="block" aria-label="Advertisement banner placement"><img id="monetagBannerImageTop" alt="Sponsored banner" class="mx-auto max-h-44 w-full rounded-xl object-contain" hidden><div id="monetagBannerPlaceholderTop" class="rounded-xl bg-gradient-to-r from-slate-900 to-teal-900 px-5 py-8 text-center text-white"><strong class="text-lg">Your Banner Ad</strong><p class="mt-1 text-sm text-slate-200">Add your banner image URL in the code settings.</p></div></div>
+      <div id="articleGrid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+      <div id="emptyState" class="hidden rounded-2xl border border-dashed border-slate-300 p-12 text-center dark:border-slate-700"><p class="text-xl font-bold">No stories found</p><p class="mt-2 text-sm text-slate-500">Try another search or category.</p></div>
+      <div class="mt-10 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 dark:border-slate-700 dark:bg-slate-900"><p class="px-2 pb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">Advertisement</p><div id="monetagBannerFeed" class="block"><img id="monetagBannerImageFeed" alt="Sponsored banner" class="mx-auto max-h-44 w-full rounded-xl object-contain" hidden><div id="monetagBannerPlaceholderFeed" class="rounded-xl bg-gradient-to-r from-slate-900 to-teal-900 px-5 py-6 text-center text-white"><strong>Ad space</strong><p class="mt-1 text-sm">Configure a suitable, age-appropriate ad provider.</p></div></div>
+    </section>
+
+    <section id="about" class="border-y border-slate-200 bg-white py-14 dark:border-slate-800 dark:bg-slate-900/50">
+      <div class="mx-auto grid max-w-7xl gap-8 px-4 md:grid-cols-2 md:items-center"><div><p class="text-xs font-bold uppercase tracking-[.2em] text-teal-600">About TechPulse</p><h2 class="mt-2 text-3xl font-black">Technology is for everyone.</h2><p class="mt-4 max-w-xl leading-7 text-slate-600 dark:text-slate-300">TechPulse brings together useful updates and approachable explainers across the technology world. Our goal is to help readers understand what is changing and why it matters.</p></div><div class="rounded-2xl bg-slate-100 p-6 dark:bg-slate-800"><p class="text-lg font-bold">Stay in the loop</p><p class="mt-1 text-sm text-slate-500">Newsletter signup UI placeholder. Connect a real mailing-list provider before collecting email addresses.</p><div class="mt-4 flex gap-2"><input disabled placeholder="Newsletter integration coming soon" class="min-w-0 flex-1 rounded-xl border border-slate-200 px-3 py-2 text-sm dark:border-slate-700"><button disabled class="rounded-xl bg-slate-300 px-4 py-2 text-sm font-bold text-slate-600">Join</button></div></div></div>
+    </section>
+  </main>
+  <footer class="bg-ink px-4 py-8 text-center text-sm text-slate-400"><p class="font-bold text-white">TechPulse<span class="text-teal-300">.</span></p><p class="mt-2">© <span id="year"></span> TechPulse. Built for curious minds.</p><p class="mt-2 text-xs">External articles remain the property of their publishers. TechPulse displays headlines, excerpts and source links.</p></footer>
+
+  <!-- Reader modal -->
+  <dialog id="readerDialog" class="bg-white text-slate-900 shadow-2xl dark:bg-slate-900 dark:text-slate-100">
+    <div class="flex items-center justify-between border-b border-slate-200 p-4 dark:border-slate-700"><span class="text-sm font-bold text-teal-600">TECHPULSE READER</span><button data-close="readerDialog" class="focus-ring rounded-lg px-3 py-1 text-xl" aria-label="Close reader">×</button></div>
+    <article id="readerContent" class="max-h-[78vh] overflow-y-auto p-5 sm:p-8"></article>
+  </dialog>
+
+  <!-- Admin login -->
+  <dialog id="loginDialog" class="bg-white text-slate-900 shadow-2xl dark:bg-slate-900 dark:text-slate-100">
+    <div class="flex items-center justify-between border-b border-slate-200 p-4 dark:border-slate-700"><h2 class="font-black">Admin sign in</h2><button data-close="loginDialog" class="focus-ring rounded-lg px-3 py-1 text-xl" aria-label="Close login">×</button></div>
+    <form id="loginForm" class="space-y-4 p-6">
+      <div class="rounded-xl bg-amber-50 p-3 text-xs leading-5 text-amber-900">Demo-only client-side login. Credentials embedded in HTML can be discovered by visitors. Do not use this as real website security.</div>
+      <label class="block text-sm font-semibold">Email<input id="adminEmail" type="email" autocomplete="username" required class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-3 dark:border-slate-700"></label>
+      <label class="block text-sm font-semibold">Password<input id="adminPassword" type="password" autocomplete="current-password" required class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-3 dark:border-slate-700"></label>
+      <p id="loginError" class="hidden text-sm text-red-500" role="alert">Incorrect email or password.</p>
+      <button class="w-full rounded-xl bg-slate-900 px-4 py-3 font-bold text-white dark:bg-teal-300 dark:text-slate-950">Sign in</button>
+    </form>
+  </dialog>
+
+  <!-- Admin studio -->
+  <dialog id="studioDialog" class="bg-white text-slate-900 shadow-2xl dark:bg-slate-900 dark:text-slate-100">
+    <div class="flex items-center justify-between border-b border-slate-200 p-4 dark:border-slate-700"><div><p class="text-xs font-bold uppercase tracking-widest text-teal-600">Creator workspace</p><h2 class="text-xl font-black">Admin Studio</h2></div><button data-close="studioDialog" class="focus-ring rounded-lg px-3 py-1 text-xl" aria-label="Close studio">×</button></div>
+    <div class="max-h-[78vh] space-y-5 overflow-y-auto p-5">
+      <div class="grid grid-cols-2 gap-3 sm:grid-cols-4"><div class="rounded-xl bg-slate-100 p-4 dark:bg-slate-800"><p class="text-xs text-slate-500">Total posts</p><p id="statPosts" class="text-2xl font-black">0</p></div><div class="rounded-xl bg-slate-100 p-4 dark:bg-slate-800"><p class="text-xs text-slate-500">Sponsored</p><p id="statSponsored" class="text-2xl font-black">0</p></div><div class="rounded-xl bg-slate-100 p-4 dark:bg-slate-800"><p class="text-xs text-slate-500">Auto / Live</p><p id="statAuto" class="text-2xl font-black">0</p></div><div class="rounded-xl bg-slate-100 p-4 dark:bg-slate-800"><p class="text-xs text-slate-500">Bookmarks</p><p id="statBookmarks" class="text-2xl font-black">0</p></div></div>
+      <div class="flex flex-wrap gap-2"><button id="newPostOpen" class="rounded-xl bg-teal-400 px-4 py-2 font-bold text-slate-950">＋ Publish article</button><button id="runAutoNow" class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-bold dark:border-slate-700">Run RSS fetch now</button><button id="exportData" class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-bold dark:border-slate-700">Export JSON backup</button><button id="adminLogout" class="ml-auto rounded-xl border border-red-300 px-4 py-2 text-sm font-bold text-red-600">Sign out</button></div>
+      <div><h3 class="mb-3 font-bold">Manage published articles</h3><div id="adminPostList" class="space-y-2"></div></div>
+      <p class="text-xs leading-5 text-slate-500">Posts are stored in this browser only. Clearing browser data removes them. RSS availability depends on the third-party service and feed publisher.</p>
+    </div>
+  </dialog>
+
+  <!-- Publish form -->
+  <dialog id="publishDialog" class="bg-white text-slate-900 shadow-2xl dark:bg-slate-900 dark:text-slate-100">
+    <div class="flex items-center justify-between border-b border-slate-200 p-4 dark:border-slate-700"><h2 class="font-black">Publish an article</h2><button data-close="publishDialog" class="focus-ring rounded-lg px-3 py-1 text-xl" aria-label="Close publish form">×</button></div>
+    <form id="publishForm" class="grid max-h-[78vh] gap-4 overflow-y-auto p-5 sm:grid-cols-2">
+      <label class="text-sm font-semibold sm:col-span-2">Title<input id="postTitle" maxlength="180" required class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 dark:border-slate-700"></label>
+      <label class="text-sm font-semibold">Category<select id="postCategory" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 dark:border-slate-700"></select></label>
+      <label class="text-sm font-semibold">Image URL<input id="postImage" type="url" placeholder="https://..." class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 dark:border-slate-700"></label>
+      <label class="text-sm font-semibold sm:col-span-2">Short excerpt<textarea id="postExcerpt" rows="2" maxlength="400" required class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 dark:border-slate-700"></textarea></label>
+      <label class="text-sm font-semibold sm:col-span-2">Article body<textarea id="postBody" rows="6" required class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 dark:border-slate-700" placeholder="Write your article..."></textarea></label>
+      <label class="text-sm font-semibold">Source / article URL<input id="postSource" type="url" placeholder="https://..." class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 dark:border-slate-700"></label>
+      <label class="text-sm font-semibold">Affiliate button label<input id="affiliateLabel" maxlength="45" placeholder="View recommended product" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 dark:border-slate-700"></label>
+      <label class="text-sm font-semibold sm:col-span-2">Affiliate buttonLink<input id="affiliateLink" type="url" placeholder="https://your-affiliate-link..." class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 dark:border-slate-700"></label>
+      <div class="flex flex-wrap gap-5 sm:col-span-2"><label class="flex items-center gap-2 text-sm"><input id="postSponsored" type="checkbox"> Sponsored / brand collaboration</label><label class="flex items-center gap-2 text-sm"><input id="postManual" type="checkbox" checked> Manual post</label></div>
+      <button class="rounded-xl bg-teal-400 px-4 py-3 font-bold text-slate-950 sm:col-span-2">Publish now</button>
+    </form>
+  </dialog>
+
+  <script>
+  (() => {
+    "use strict";
+    const CATEGORIES = ["Technology News","Programming","Cybersecurity","Gaming","Apps & Software","Web Development","Tech Tips"];
+    const STORAGE = { posts:"techpulse_posts_v1", bookmarks:"techpulse_bookmarks_v1", theme:"techpulse_theme_v1", lastBatch:"techpulse_last_batch_v1" };
+    // DEMO ONLY: never put real admin credentials in public client-side code.
+    const DEMO_ADMIN = { email:"admin@techpulse.lk", password:"TechPulse#Secure@2026_x9K!" };
+    const FALLBACK_IMAGES = {
+      "Technology News":"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80",
+      "Programming":"https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=900&q=80",
+      "Cybersecurity":"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=900&q=80",
+      "Gaming":"https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=900&q=80",
+      "Apps & Software":"https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80",
+      "Web Development":"https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=80",
+      "Tech Tips":"https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80"
+    };
+
+    // Replace/add RSS feeds here. rss2json is a third-party converter; public use may be rate-limited.
+    const RSS_FEEDS = [
+      { name:"The Verge", url:"https://www.theverge.com/rss/index.xml" },
+      { name:"Ars Technica", url:"https://feeds.arstechnica.com/arstechnica/index" },
+      { name:"BleepingComputer", url:"https://www.bleepingcomputer.com/feed/" },
+      { name:"Krebs on Security", url:"https://krebsonsecurity.com/feed/" },
+      { name:"GitHub Blog", url:"https://github.blog/feed/" }
+    ];
+    const RSS2JSON_ENDPOINT = "https://api.rss2json.com/v1/api.json?rss_url=";
+
+    // BANNER SETTINGS: paste the direct URL of your banner image hosted on your website.
+    // Choose the SmartLink used when visitors click the clearly marked ad.
+    const MONETAG_BANNER_IMAGE = "PASTE_YOUR_BANNER_IMAGE_DIRECT_URL_HERE";
+    const MONETAG_SMARTLINKS = [
+      "https://uplcm.com/4/12340648",
+      "https://uplcm.com/4/12286110",
+      "https://uplcm.com/4/12340617"
+    ];
+    const MONETAG_BANNER_LINK = MONETAG_SMARTLINKS[0];
+    let smartLinkIndex = 0;
+    function openSponsoredLink() {
+      const url = MONETAG_SMARTLINKS[smartLinkIndex % MONETAG_SMARTLINKS.length];
+      smartLinkIndex++;
+      // Called directly from a user click to avoid popup blockers.
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    const $ = id => document.getElementById(id);
+    const safeParse = (raw, fallback) => { try { return raw ? JSON.parse(raw) : fallback; } catch { return fallback; } };
+    const uid = () => "tp_" + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+    const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+    const cleanExcerpt = html => {
+      const doc = new DOMParser().parseFromString(String(html || ""), "text/html");
+      doc.querySelectorAll("script,style,iframe,object,embed").forEach(n => n.remove());
+      return (doc.body.textContent || "").replace(/\s+/g," ").trim().slice(0,360);
+    };
+    const safeURL = value => {
+      try { const u = new URL(value); return ["https:","http:"].includes(u.protocol) ? u.href : ""; } catch { return ""; }
+    };
+    const readStore = (key, fallback) => safeParse(localStorage.getItem(key), fallback);
+    const writeStore = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { console.warn("Storage unavailable/full", e); alert("Browser storage is unavailable or full. Export a backup and clear some space."); } };
+
+    function categorizeArticle(text) {
+      const s = String(text || "").toLowerCase();
+      const rules = [
+        ["Cybersecurity", /\b(cyber|security|hack|hacking|malware|ransomware|phishing|vulnerability|breach|privacy|zero.day|cve)\b/],
+        ["Gaming", /\b(game|gaming|xbox|playstation|nintendo|steam|esports|gpu|console|gamer)\b/],
+        ["Web Development", /\b(html|css|javascript|typescript|react|vue|angular|frontend|front.end|web development|website|browser|web app)\b/],
+        ["Programming", /\b(program|programming|python|java|rust|golang|c\+\+|developer|github|gitlab|open.source|framework|api|database|coding)\b/],
+        ["Apps & Software", /\b(app|application|software|windows|android|ios|macos|linux|microsoft office|productivity|update|release)\b/],
+        ["Tech Tips", /\b(how to|guide|tutorial|tips|trick|fix| troubleshoot|setup|configure|step.by.step)\b/]
+      ];
+      for (const [category, regex] of rules) if (regex.test(s)) return category;
+      return "Technology News";
+    }
+
+    const seedPosts = [
+      { id:"seed-1", title:"How AI is changing the way we work with technology", category:"Technology News", excerpt:"A look at the tools and ideas shaping the next generation of digital work.", body:"Artificial intelligence is becoming part of everyday software, research and creative workflows. The most useful approach is to understand what a tool can do, verify important outputs and protect personal information.\n\nAs the ecosystem changes, keep learning and evaluate new tools based on reliability, privacy and real value.", image:FALLBACK_IMAGES["Technology News"], date:new Date().toISOString(), source:"", origin:"manual", sponsored:false },
+      { id:"seed-2", title:"A beginner-friendly path to learning Python", category:"Programming", excerpt:"Build a strong foundation with small projects, readable code and steady practice.", body:"Start with variables, conditions, loops, functions and collections. Then build small projects such as a calculator, a notes app or a simple data viewer.\n\nRead error messages carefully and practise improving one feature at a time.", image:FALLBACK_IMAGES["Programming"], date:new Date().toISOString(), source:"", origin:"manual", sponsored:false },
+      { id:"seed-3", title:"Simple habits that improve your online security", category:"Cybersecurity", excerpt:"Practical steps for protecting accounts and personal information online.", body:"Use a unique password for every important account, enable multi-factor authentication where available, keep devices updated and be cautious with unexpected links or attachments.\n\nNever share verification codes with anyone. Review account recovery options regularly.", image:FALLBACK_IMAGES["Cybersecurity"], date:new Date().toISOString(), source:"", origin:"manual", sponsored:false },
+      { id:"seed-4", title:"What makes a great gaming setup?", category:"Gaming", excerpt:"Understand the role of displays, input devices, audio and performance settings.", body:"A comfortable gaming setup is about balance. Consider the games you play, the display you use, available space and accessibility. Keep software updated and take regular breaks.", image:FALLBACK_IMAGES["Gaming"], date:new Date().toISOString(), source:"", origin:"manual", sponsored:false },
+      { id:"seed-5", title:"Choosing apps that make everyday tasks easier", category:"Apps & Software", excerpt:"A simple checklist for finding software that fits your needs.", body:"Look for clear privacy information, regular updates, accessibility, good support and compatibility with your devices. Install software from trusted sources and review permissions.", image:FALLBACK_IMAGES["Apps & Software"], date:new Date().toISOString(), source:"", origin:"manual", sponsored:false },
+      { id:"seed-6", title:"The building blocks of a modern website", category:"Web Development", excerpt:"HTML, CSS and JavaScript work together to create interactive web experiences.", body:"HTML gives a page structure, CSS controls its presentation and JavaScript adds behaviour. Learn semantic HTML, responsive layouts and accessible interactions before adding complexity.", image:FALLBACK_IMAGES["Web Development"], date:new Date().toISOString(), source:"", origin:"manual", sponsored:false },
+      { id:"seed-7", title:"Five quick checks when your device feels slow", category:"Tech Tips", excerpt:"A few safe maintenance steps can help identify common performance problems.", body:"Restart your device, install trusted system updates, check available storage, close apps you are not using and review startup applications. Avoid unknown cleaner apps and back up important files.", image:FALLBACK_IMAGES["Tech Tips"], date:new Date().toISOString(), source:"", origin:"manual", sponsored:false }
+    ];
+
+    // Shared static content is loaded from articles.json hosted beside index.html.
+    // Browser localStorage is visitor-specific, so it must not be the source of public posts.
+    let posts = [...seedPosts];
+    let localPosts = readStore(STORAGE.posts, []);
+    if (Array.isArray(localPosts)) posts = [...localPosts, ...posts.filter(seed=>!localPosts.some(p=>p.id===seed.id))];
+
+    async function loadSharedArticles() {
+      try {
+        const response = await fetch("./articles.json", {cache:"no-store"});
+        if (!response.ok) throw new Error("articles.json HTTP " + response.status);
+        const data = await response.json();
+        const shared = Array.isArray(data) ? data : (Array.isArray(data.articles) ? data.articles : []);
+        if (shared.length) {
+          const map = new Map();
+          [...shared, ...posts].forEach(p=>{ if(p && p.id) map.set(String(p.id), p); });
+          posts = [...map.values()];
+          renderPosts();
+        }
+      } catch (error) {
+        console.warn("Could not load shared articles.json; showing built-in/local articles.", error);
+        const status = document.getElementById("feedSub");
+        if(status) status.textContent = "Could not load articles.json. Upload it beside index.html on your host.";
+      }
+    }
+    let bookmarks = new Set(readStore(STORAGE.bookmarks, []));
+    let activeCategory = "All";
+    let searchTerm = "";
+    let isAdmin = false;
+
+    function savePosts() { writeStore(STORAGE.posts, posts); }
+    function saveBookmarks() { writeStore(STORAGE.bookmarks, [...bookmarks]); updateBookmarkCount(); }
+    function updateBookmarkCount() { $("bookmarkCount").textContent = bookmarks.size; }
+    function formatDate(value) { const d = new Date(value); return Number.isNaN(d.getTime()) ? "Recently" : d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}); }
+    function categoryButtons() {
+      const items = ["All", ...CATEGORIES];
+      $("categoryFilters").innerHTML = items.map(c => `<button data-category="${escapeHTML(c)}" class="focus-ring rounded-full border px-4 py-2 text-sm font-semibold transition ${activeCategory===c ? "border-teal-400 bg-teal-400 text-slate-950" : "border-slate-200 bg-white hover:border-teal-400 dark:border-slate-700 dark:bg-slate-900"}">${escapeHTML(c)}</button>`).join("");
+      $("postCategory").innerHTML = CATEGORIES.map(c=>`<option>${escapeHTML(c)}</option>`).join("");
+    }
+    function filteredPosts() {
+      return posts.filter(p => (activeCategory==="All" || p.category===activeCategory) &&
+        (!searchTerm || (p.title+" "+p.excerpt+" "+p.category).toLowerCase().includes(searchTerm)));
+    }
+    function renderPosts() {
+      const list = filteredPosts();
+      $("feedTitle").textContent = activeCategory==="All" ? "Latest stories" : activeCategory;
+      $("feedSub").textContent = `${list.length} ${list.length===1?"story":"stories"} · Updated ${new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}`;
+      $("articleGrid").innerHTML = list.map(p => {
+        const badge = p.sponsored ? '<span class="rounded-full bg-amber-100 px-2 py-1 text-[10px] font-black uppercase text-amber-800">Sponsored</span>' : p.origin==="rss" ? '<span class="rounded-full bg-teal-100 px-2 py-1 text-[10px] font-black uppercase text-teal-800">Auto / Live</span>' : "";
+        return `<article class="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900">
+          <button class="reader-open block w-full text-left" data-id="${escapeHTML(p.id)}" aria-label="Read ${escapeHTML(p.title)}"><div class="relative overflow-hidden"><img loading="lazy" src="${escapeHTML(safeURL(p.image)||FALLBACK_IMAGES[p.category]||FALLBACK_IMAGES["Technology News"])}" onerror="this.onerror=null;this.src='${FALLBACK_IMAGES[p.category]||FALLBACK_IMAGES["Technology News"]}'" alt="" class="h-48 w-full object-cover transition duration-500 group-hover:scale-105"><div class="absolute left-3 top-3 flex flex-wrap gap-2">${badge}</div></div><div class="p-5"><div class="flex items-center justify-between gap-2 text-xs text-slate-500"><span>${escapeHTML(p.category)}</span><time>${formatDate(p.date)}</time></div><h3 class="mt-3 text-xl font-black leading-snug group-hover:text-teal-600">${escapeHTML(p.title)}</h3><p class="mt-3 line-clamp-3 text-sm leading-6 text-slate-500 dark:text-slate-400">${escapeHTML(p.excerpt)}</p><span class="mt-5 inline-block text-sm font-bold text-teal-600">Read story · Opens sponsored link ↗</span></div></button>
+          <div class="flex items-center justify-between border-t border-slate-100 px-5 py-3 dark:border-slate-800"><span class="text-xs text-slate-400">${p.origin==="rss"?"From "+escapeHTML(p.sourceName||"RSS feed"):"TechPulse"}</span><button data-bookmark="${escapeHTML(p.id)}" class="focus-ring rounded-lg px-2 py-1 text-sm font-semibold ${bookmarks.has(p.id)?"text-teal-600":"text-slate-500"}" aria-label="${bookmarks.has(p.id)?"Remove bookmark":"Bookmark"}">${bookmarks.has(p.id)?"★ Saved":"☆ Save"}</button></div>
+        </article>`;
+      }).join("");
+      $("emptyState").classList.toggle("hidden", list.length!==0);
+      updateBookmarkCount();
+    }
+    function openReader(id) {
+      const p = posts.find(x=>x.id===id); if (!p) return;
+      const affiliate = safeURL(p.buttonLink);
+      const source = safeURL(p.source);
+      $("readerContent").innerHTML = `
+        <div class="mb-4 flex flex-wrap gap-2"><span class="rounded-full bg-teal-100 px-3 py-1 text-xs font-bold text-teal-900">${escapeHTML(p.category)}</span>${p.sponsored?'<span class="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-900">Sponsored content</span>':""}${p.origin==="rss"?'<span class="rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-900">Auto / Live</span>':""}</div>
+        <h1 class="text-3xl font-black leading-tight">${escapeHTML(p.title)}</h1><p class="mt-3 text-sm text-slate-500">${formatDate(p.date)} ${p.sourceName?"· "+escapeHTML(p.sourceName):""}</p>
+        <img src="${escapeHTML(safeURL(p.image)||FALLBACK_IMAGES[p.category])}" alt="${escapeHTML(p.imageAlt||p.title)}" class="mt-6 max-h-80 w-full rounded-2xl object-cover" onerror="this.onerror=null;this.src='${FALLBACK_IMAGES[p.category]||FALLBACK_IMAGES["Technology News"]}'">
+        ${p.imageCredit?`<p class="mt-2 text-xs text-slate-500">Image: ${escapeHTML(p.imageCredit)}${p.imageLicense?` · ${escapeHTML(p.imageLicense)}`:""}${p.imageSource?` · <a class="underline" target="_blank" rel="noopener noreferrer" href="${escapeHTML(p.imageSource)}">Source</a>`:""}</p>`:""}
+        <p class="mt-6 text-lg font-semibold leading-8">${escapeHTML(p.excerpt)}</p>
+        <div class="prose prose-slate mt-5 max-w-none leading-8 dark:prose-invert">${escapeHTML(p.body||p.excerpt).replace(/\n/g,"<br><br>")}</div>
+        ${affiliate?`<aside class="mt-8 rounded-2xl border border-teal-300/40 bg-teal-50 p-5 dark:bg-teal-950/30"><p class="text-xs font-black uppercase tracking-widest text-teal-700 dark:text-teal-300">Recommended resource</p><p class="mt-1 font-bold">A product or service selected by TechPulse</p><a href="${escapeHTML(affiliate)}" target="_blank" rel="noopener noreferrer sponsored" class="mt-3 inline-block rounded-xl bg-teal-400 px-4 py-2 font-bold text-slate-950">${escapeHTML(p.affiliateLabel||"View recommendation")} ↗</a><p class="mt-2 text-xs text-slate-500">Affiliate disclosure: TechPulse may earn a commission from qualifying purchases.</p></aside>`:""}
+        ${source?`<p class="mt-8 border-t border-slate-200 pt-5 text-sm dark:border-slate-700">Original source: <a class="font-bold text-teal-600 underline" href="${escapeHTML(source)}" target="_blank" rel="noopener noreferrer">Read at publisher ↗</a></p>`:""}
+        <div class="mt-8 overflow-hidden rounded-xl border border-slate-200 p-2 dark:border-slate-700"><p class="px-2 pb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400">Advertisement</p><div class="block"><img src="${escapeHTML(safeURL(MONETAG_BANNER_IMAGE)||"")}" alt="Advertisement banner" class="mx-auto max-h-44 w-full rounded-xl object-contain" onerror="this.style.display='none'"><span class="mt-2 block text-center text-xs text-slate-500">Ad placement — configure a reviewed, age-appropriate ad provider.</span></div></div>
+        <button data-bookmark="${escapeHTML(p.id)}" class="mt-6 rounded-xl border border-slate-300 px-4 py-2 text-sm font-bold dark:border-slate-700">${bookmarks.has(p.id)?"★ Remove bookmark":"☆ Save article"}</button>`;
+      $("readerDialog").showModal();
+    }
+
+    // Pick the image attached to THIS feed item, not a generic image for its category.
+    // RSS feeds commonly expose images through thumbnail, media:content, enclosure,
+    // or an <img> tag embedded in the description/content HTML.
+    function extractArticleImage(item) {
+      const candidates = [];
+      const add = value => {
+        if (!value) return;
+        if (typeof value === "string") candidates.push(value);
+        else if (Array.isArray(value)) value.forEach(add);
+        else if (typeof value === "object") {
+          add(value.url); add(value.href); add(value.link); add(value.src);
+          if (value.$ && value.$.url) add(value.$.url);
+        }
+      };
+      add(item.thumbnail);
+      add(item.enclosure);
+      add(item.media); add(item.media_content); add(item.mediaContent);
+      add(item.image); add(item.image_url); add(item.imageUrl);
+      const html = [item.content, item.description, item.contentSnippet, item.encoded].filter(Boolean).join("\n");
+      if (html) {
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const img = doc.querySelector("img[src], img[data-src], img[data-original], source[srcset]");
+        if (img) {
+          add(img.getAttribute("src")); add(img.getAttribute("data-src")); add(img.getAttribute("data-original"));
+          const srcset = img.getAttribute("srcset");
+          if (srcset) add(srcset.split(",")[0].trim().split(/\s+/)[0]);
+        }
+      }
+      for (const candidate of candidates) {
+        const url = safeURL(candidate);
+        if (url && !/\.(svg|gif)(?:[?#]|$)/i.test(url)) return url;
+      }
+      return "";
+    }
+
+    // Wikimedia Commons topic-image lookup (free, no API key). RSS image is preferred.
+    // Search results are cached locally to reduce repeat requests and API load.
+    const COMMONS_API = "https://commons.wikimedia.org/w/api.php";
+    const COMMONS_CACHE_KEY = "techpulse_commons_image_cache_v1";
+    const commonsCache = readStore(COMMONS_CACHE_KEY, {});
+    let commonsActive = 0;
+    const commonsWaiters = [];
+    async function withCommonsSlot(task) {
+      if (commonsActive >= 4) await new Promise(resolve=>commonsWaiters.push(resolve));
+      commonsActive++;
+      try { return await task(); }
+      finally { commonsActive--; const next=commonsWaiters.shift(); if(next)next(); }
+    }
+    function topicSearchText(title, excerpt) {
+      // Keep the actual named subject and useful title words; avoid broad category-only searches.
+      const raw = `${title} ${excerpt.slice(0,140)}`.replace(/https?:\/\/\S+/g," ");
+      return raw.replace(/[“”‘’"'`]/g," ").replace(/\s+/g," ").trim().slice(0,180);
+    }
+    function commonsRelevance(fileTitle, query) {
+      const normalize = v=>String(v||"").toLowerCase().replace(/file:/g," ").replace(/\.(jpg|jpeg|png|webp|tif|tiff)$/i," ").replace(/[^a-z0-9]+/g," ").trim();
+      const stop = new Set("the a an and or for to of in on at with from by is are was were this that new latest update updates announces announced launch launched unveils unveiled news review hands official first how why what tech technology company companies image photo wallpaper render concept rumored rumor leak leaks trailer release date gameplay game games device devices smartphone phone today after about into their its".split(" "));
+      const q=normalize(query).split(" ").filter(w=>w.length>2&&!stop.has(w));
+      const f=new Set(normalize(fileTitle).split(" "));
+      const hit=q.filter(w=>f.has(w));
+      // GTA is commonly written out as Grand Theft Auto on Commons.
+      if(/\bgta\b/i.test(query) && /grand theft auto/i.test(fileTitle)) hit.push("gta");
+      return {score:hit.length, hits:hit};
+    }
+    async function findCommonsTopicImage(title, excerpt) {
+      const query=topicSearchText(title,excerpt);
+      const cacheKey=query.toLowerCase();
+      if (commonsCache[cacheKey]) return commonsCache[cacheKey];
+      return withCommonsSlot(async()=>{
+        try {
+          const params=new URLSearchParams({action:"query",format:"json",origin:"*",generator:"search",gsrsearch:`filetype:bitmap ${query}`,gsrnamespace:"6",gsrlimit:"7",prop:"imageinfo",iiprop:"url|extmetadata",iiurlwidth:"1000",iiextmetadatafilter:"Artist|Credit|LicenseShortName|LicenseUrl|ImageDescription"});
+          const response=await fetch(`${COMMONS_API}?${params.toString()}`,{headers:{"Accept":"application/json"}});
+          if(!response.ok) throw new Error(`Commons API ${response.status}`);
+          const data=await response.json();
+          const pages=Object.values(data.query?.pages||{}).filter(page=>page.imageinfo?.[0]?.thumburl||page.imageinfo?.[0]?.url);
+          const ranked=pages.map(page=>({page,...commonsRelevance(page.title,query)})).sort((a,b)=>b.score-a.score);
+          const best=ranked[0];
+          // Require a meaningful topic match; don't choose a random image for an unrelated article.
+          if(!best || best.score<1) return null;
+          const info=best.page.imageinfo[0], meta=info.extmetadata||{};
+          const cleanMeta=k=>String(meta[k]?.value||"").replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim().slice(0,220);
+          const result={url:safeURL(info.thumburl)||safeURL(info.url), source:safeURL(info.descriptionurl)||`https://commons.wikimedia.org/wiki/${encodeURIComponent(best.page.title.replace(/ /g,"_"))}`, credit:cleanMeta("Artist")||cleanMeta("Credit")||best.page.title.replace(/^File:/,""), license:cleanMeta("LicenseShortName")||cleanMeta("UsageTerms"), title:best.page.title.replace(/^File:/,""), alt:cleanMeta("ImageDescription")||title};
+          if(result.url){commonsCache[cacheKey]=result;writeStore(COMMONS_CACHE_KEY,commonsCache);return result;}
+          return null;
+        }catch(error){console.warn("Wikimedia image lookup failed:",error);return null;}
+      });
+    }
+
+    async function fetchFeed(feed) {
+      const endpoint = RSS2JSON_ENDPOINT + encodeURIComponent(feed.url);
+      const response = await fetch(endpoint, {headers:{ "Accept":"application/json" }});
+      if (!response.ok) throw new Error(`RSS converter returned ${response.status}`);
+      const data = await response.json();
+      if (data.status !== "ok" || !Array.isArray(data.items)) throw new Error("Invalid RSS response");
+      const items=data.items.slice(0,12);
+      return Promise.all(items.map(async item => {
+        const title = cleanExcerpt(item.title);
+        const rawContent = item.content || item.description || item.contentSnippet || "";
+        const excerpt = cleanExcerpt(rawContent);
+        const category = categorizeArticle(title+" "+excerpt);
+        const articleImage = extractArticleImage(item);
+        let image = articleImage || "";
+        let imageCredit="", imageLicense="", imageSource="", imageAlt=title, imageProvider="rss";
+        if(!image){
+          const commons=await findCommonsTopicImage(title,excerpt);
+          if(commons){image=commons.url;imageCredit=commons.credit;imageLicense=commons.license;imageSource=commons.source;imageAlt=commons.alt;imageProvider="wikimedia";}
+        }
+        if(!image){image=FALLBACK_IMAGES[category]||FALLBACK_IMAGES["Technology News"];imageProvider="fallback";}
+        return { id:"rss_"+btoa(unescape(encodeURIComponent(item.guid||item.link||title))).replace(/[^a-z0-9]/gi,"").slice(0,45),
+          title, category, excerpt:excerpt||"Open the publisher's article for the full story.",
+          body:excerpt||"This story is available from the original publisher. Follow the source link to read more.",
+          image, imageFromFeed:Boolean(articleImage), imageProvider, imageCredit, imageLicense, imageSource, imageAlt,
+          date:item.pubDate||new Date().toISOString(), source:safeURL(item.link)||"", sourceName:feed.name,
+          origin:"rss", sponsored:false };
+      })).then(items=>items.filter(p=>p.title && p.source));
+    }
+    async function fetchAllFeeds() {
+      const button = $("refreshFeeds"); button.disabled=true; button.textContent="Fetching…";
+      const results = await Promise.allSettled(RSS_FEEDS.map(fetchFeed));
+      let incoming = results.filter(r=>r.status==="fulfilled").flatMap(r=>r.value);
+      const failed = results.filter(r=>r.status==="rejected").length;
+      const seen = new Set(posts.map(p=>(p.source||"").toLowerCase()).filter(Boolean));
+      incoming = incoming.filter(p=>!seen.has(p.source.toLowerCase()));
+      posts = [...incoming, ...posts].slice(0,250);
+      savePosts(); renderPosts(); renderAdmin();
+      button.disabled=false; button.textContent="↻ Refresh feeds";
+      if (incoming.length) alert(`Added ${incoming.length} new articles.${failed?` ${failed} feed(s) could not be reached.`:""}`);
+      else alert(`No new articles were added.${failed?` ${failed} feed(s) could not be reached; the RSS service may be unavailable or rate-limited.`:""}`);
+      return incoming.length;
+    }
+
+    // Runs after 5:00 PM local time once per calendar day. A timer checks periodically while the tab is open.
+    async function checkDailyAutoPost() {
+      const now = new Date();
+      const today = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
+      if (now.getHours() < 17 || localStorage.getItem(STORAGE.lastBatch)===today) return;
+      // Mark first to prevent repeated fetch storms if the request fails; manual refresh remains available.
+      localStorage.setItem(STORAGE.lastBatch, today);
+      await fetchAllFeeds();
+    }
+    function startScheduler() {
+      checkDailyAutoPost().catch(console.warn);
+      setInterval(()=>checkDailyAutoPost().catch(console.warn), 60*1000);
+      document.addEventListener("visibilitychange",()=>{ if (!document.hidden) checkDailyAutoPost().catch(console.warn); });
+    }
+
+    function renderAdmin() {
+      $("statPosts").textContent=posts.length;
+      $("statSponsored").textContent=posts.filter(p=>p.sponsored).length;
+      $("statAuto").textContent=posts.filter(p=>p.origin==="rss").length;
+      $("statBookmarks").textContent=bookmarks.size;
+      $("adminPostList").innerHTML=posts.slice(0,80).map(p=>`<div class="flex items-center justify-between gap-3 rounded-xl border border-slate-200 p-3 dark:border-slate-700"><div class="min-w-0"><p class="truncate text-sm font-bold">${escapeHTML(p.title)}</p><p class="text-xs text-slate-500">${escapeHTML(p.category)} · ${p.sponsored?"Sponsored":p.origin==="rss"?"Auto / Live · "+(p.imageProvider||"RSS image"):"Manual"}</p></div><button data-delete="${escapeHTML(p.id)}" class="shrink-0 rounded-lg border border-red-300 px-3 py-1.5 text-xs font-bold text-red-600">Delete</button></div>`).join("") || '<p class="text-sm text-slate-500">No articles yet.</p>';
+    }
+    function requireAdmin() { if (!isAdmin) { alert("Please sign in first."); return false; } return true; }
+    function showStudio() { renderAdmin(); $("studioDialog").showModal(); }
+
+    $("categoryFilters").addEventListener("click",e=>{ const b=e.target.closest("[data-category]"); if(!b)return; activeCategory=b.dataset.category; categoryButtons(); renderPosts(); });
+    $("articleGrid").addEventListener("click",e=>{
+      const bookmark=e.target.closest("[data-bookmark]"); if(bookmark){ toggleBookmark(bookmark.dataset.bookmark); return; }
+      const reader=e.target.closest("[data-id]");
+      if(reader) {
+        openSponsoredLink();
+        openReader(reader.dataset.id);
+      }
+    });
+    $("readerContent").addEventListener("click",e=>{ const b=e.target.closest("[data-bookmark]"); if(b)toggleBookmark(b.dataset.bookmark); });
+    function toggleBookmark(id) { bookmarks.has(id)?bookmarks.delete(id):bookmarks.add(id); saveBookmarks(); renderPosts(); if($("readerDialog").open)openReader(id); if(isAdmin)renderAdmin(); }
+    $("searchInput").addEventListener("input",e=>{searchTerm=e.target.value.trim().toLowerCase();renderPosts();});
+    $("refreshFeeds").addEventListener("click",fetchAllFeeds);
+    $("bookmarksTop").addEventListener("click",()=>{activeCategory="All";searchTerm="";$("searchInput").value="";const saved=posts.filter(p=>bookmarks.has(p.id));$("feedTitle").textContent="Saved articles";$("feedSub").textContent=`${saved.length} bookmarked stories`; $("articleGrid").innerHTML=saved.map(p=>`<article class="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"><p class="text-xs text-teal-600">${escapeHTML(p.category)}</p><button class="reader-open mt-2 text-left text-lg font-black" data-id="${escapeHTML(p.id)}">${escapeHTML(p.title)}</button><button data-bookmark="${escapeHTML(p.id)}" class="mt-3 block text-sm font-bold text-teal-600">★ Remove saved</button></article>`).join("");$("emptyState").classList.toggle("hidden",saved.length>0);});
+    $("themeToggle").addEventListener("click",()=>{const dark=document.documentElement.classList.toggle("dark");localStorage.setItem(STORAGE.theme,dark?"dark":"light");$("themeToggle").textContent=dark?"☀️":"🌙";});
+    if(localStorage.getItem(STORAGE.theme)==="dark")document.documentElement.classList.add("dark");
+    $("themeToggle").textContent=document.documentElement.classList.contains("dark")?"☀️":"🌙";
+
+    $("adminOpen").addEventListener("click",()=>{ if(isAdmin)showStudio(); else $("loginDialog").showModal(); });
+    $("loginForm").addEventListener("submit",e=>{e.preventDefault();const ok=$("adminEmail").value.trim().toLowerCase()===DEMO_ADMIN.email && $("adminPassword").value===DEMO_ADMIN.password;if(!ok){$("loginError").classList.remove("hidden");return;} $("loginError").classList.add("hidden");isAdmin=true;$("loginDialog").close();showStudio();});
+    $("adminLogout").addEventListener("click",()=>{isAdmin=false;$("studioDialog").close();});
+    $("newPostOpen").addEventListener("click",()=>{if(requireAdmin())$("publishDialog").showModal();});
+    $("publishForm").addEventListener("submit",e=>{
+      e.preventDefault();if(!requireAdmin())return;
+      const title=$("postTitle").value.trim(), excerpt=$("postExcerpt").value.trim(), body=$("postBody").value.trim();
+      const image=safeURL($("postImage").value)||FALLBACK_IMAGES[$("postCategory").value];
+      const source=safeURL($("postSource").value);
+      const buttonLink=safeURL($("affiliateLink").value);
+      const p={id:uid(),title,category:$("postCategory").value,excerpt,body,image,date:new Date().toISOString(),source,origin:$("postManual").checked?"manual":"admin",sponsored:$("postSponsored").checked,buttonLink,affiliateLabel:$("affiliateLabel").value.trim()};
+      posts.unshift(p);savePosts();renderPosts();renderAdmin();$("publishForm").reset();$("publishDialog").close();$("studioDialog").close();alert("Article published on this browser.");showStudio();
+    });
+    $("adminPostList").addEventListener("click",e=>{const b=e.target.closest("[data-delete]");if(!b||!requireAdmin())return;const p=posts.find(x=>x.id===b.dataset.delete);if(!p||!confirm(`Permanently delete "${p.title}" from this browser?`))return;posts=posts.filter(x=>x.id!==b.dataset.delete);bookmarks.delete(b.dataset.delete);savePosts();saveBookmarks();renderPosts();renderAdmin();});
+    $("runAutoNow").addEventListener("click",()=>{if(requireAdmin())fetchAllFeeds();});
+    $("exportData").addEventListener("click",()=>{if(!requireAdmin())return;const blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),posts,bookmarks:[...bookmarks]},null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="techpulse-backup.json";a.click();URL.revokeObjectURL(url);});
+    document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",()=>$(b.dataset.close).close()));
+    ["readerDialog","loginDialog","studioDialog","publishDialog"].forEach(id=>$(id).addEventListener("click",e=>{if(e.target===$(id))$(id).close();}));
+
+    // Configure banner image/link on the two visible homepage placements.
+    const bannerImageUrl = safeURL(MONETAG_BANNER_IMAGE);
+    const bannerLinkUrl = safeURL(MONETAG_BANNER_LINK);
+    ["Top","Feed"].forEach(place=>{
+      const anchor=$("monetagBanner"+place), image=$("monetagBannerImage"+place), placeholder=$("monetagBannerPlaceholder"+place);
+      if(!anchor||!image||!placeholder)return;
+      if(bannerLinkUrl)anchor.href=bannerLinkUrl;
+      if(bannerImageUrl&&!MONETAG_BANNER_IMAGE.includes("PASTE_YOUR_")){
+        image.src=bannerImageUrl; image.hidden=false; placeholder.hidden=true;
+        image.onerror=()=>{image.hidden=true;placeholder.hidden=false;};
+      }
+    });
+
+    $("year").textContent=new Date().getFullYear();
+    categoryButtons();renderPosts();updateBookmarkCount();loadSharedArticles();startScheduler();
+  })();
+  </script>
+</body>
+</html>

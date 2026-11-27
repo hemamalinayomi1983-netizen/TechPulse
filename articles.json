@@ -1,0 +1,88 @@
+{
+  "articles": [
+    {
+      "id": "shared-1",
+      "title": "How AI is changing the way we work with technology",
+      "category": "Technology News",
+      "excerpt": "A look at the tools and ideas shaping the next generation of digital work.",
+      "body": "Artificial intelligence is becoming part of everyday software, research and creative workflows. Verify important outputs and protect personal information.",
+      "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1000&q=80",
+      "date": "2026-11-26",
+      "source": "",
+      "origin": "manual",
+      "sponsored": false
+    },
+    {
+      "id": "shared-2",
+      "title": "A beginner-friendly path to learning Python",
+      "category": "Programming",
+      "excerpt": "Build a strong foundation with small projects, readable code and steady practice.",
+      "body": "Start with variables, conditions, loops, functions and collections. Build small projects and practise improving one feature at a time.",
+      "image": "https://images.unsplash.com/photo-1526379095098-d400fd0bf935?auto=format&fit=crop&w=1000&q=80",
+      "date": "2026-11-26",
+      "source": "",
+      "origin": "manual",
+      "sponsored": false
+    },
+    {
+      "id": "shared-3",
+      "title": "Simple habits that improve your online security",
+      "category": "Cybersecurity",
+      "excerpt": "Practical steps for protecting accounts and personal information online.",
+      "body": "Use unique passwords, enable multi-factor authentication, keep devices updated and be cautious with unexpected links.",
+      "image": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1000&q=80",
+      "date": "2026-11-26",
+      "source": "",
+      "origin": "manual",
+      "sponsored": false
+    },
+    {
+      "id": "shared-4",
+      "title": "What makes a great gaming setup?",
+      "category": "Gaming",
+      "excerpt": "Understand the role of displays, input devices, audio and performance settings.",
+      "body": "A comfortable gaming setup is about balance. Consider your games, display, available space and accessibility.",
+      "image": "https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=1000&q=80",
+      "date": "2026-11-26",
+      "source": "",
+      "origin": "manual",
+      "sponsored": false
+    },
+    {
+      "id": "shared-5",
+      "title": "Choosing apps that make everyday tasks easier",
+      "category": "Apps & Software",
+      "excerpt": "A simple checklist for finding software that fits your needs.",
+      "body": "Look for clear privacy information, regular updates, accessibility and compatibility. Install from trusted sources.",
+      "image": "https://images.unsplash.com/photo-1558655146-9f40138edfeb?auto=format&fit=crop&w=1000&q=80",
+      "date": "2026-11-26",
+      "source": "",
+      "origin": "manual",
+      "sponsored": false
+    },
+    {
+      "id": "shared-6",
+      "title": "The building blocks of a modern website",
+      "category": "Web Development",
+      "excerpt": "HTML, CSS and JavaScript work together to create interactive web experiences.",
+      "body": "HTML gives a page structure, CSS controls presentation and JavaScript adds behaviour.",
+      "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=80",
+      "date": "2026-11-26",
+      "source": "",
+      "origin": "manual",
+      "sponsored": false
+    },
+    {
+      "id": "shared-7",
+      "title": "Five quick checks when your device feels slow",
+      "category": "Tech Tips",
+      "excerpt": "A few safe maintenance steps can help identify common performance problems.",
+      "body": "Restart your device, install trusted updates, check storage and review startup applications.",
+      "image": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=80",
+      "date": "2026-11-26",
+      "source": "",
+      "origin": "manual",
+      "sponsored": false
+    }
+  ]
+}

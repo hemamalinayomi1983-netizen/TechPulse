@@ -1,0 +1,17 @@
+[
+  {
+    "name": "BBC Technology",
+    "url": "https://feeds.bbci.co.uk/news/technology/rss.xml",
+    "category": "Technology News"
+  },
+  {
+    "name": "The Verge",
+    "url": "https://www.theverge.com/rss/index.xml",
+    "category": "Technology News"
+  },
+  {
+    "name": "NASA News",
+    "url": "https://www.nasa.gov/rss/dyn/breaking_news.rss",
+    "category": "Technology News"
+  }
+]
